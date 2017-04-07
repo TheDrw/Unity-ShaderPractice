@@ -5,7 +5,7 @@ Here are some things I made messing around when learning shaders. They are in th
 # Shaders not from me
 CoolUIShader.shader is from Quill18's tutorial and KatUniteShader.shader is from Unity's Unite LA 2016 tutorial thing. The PostEffectShader was a base of Quill18's tutorial, but I branched off and did my own thing and explored with math stuff.
 
-# License
+# MIT License
 Copyright (c) 2017 Andrew Esberto
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:

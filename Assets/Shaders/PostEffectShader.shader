@@ -118,11 +118,11 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 
-				fixed4 col = tex2D( _MainTex, i.uv + waveVision(i) );
+				fixed4 col = tex2D( _MainTex, i.uv );
 				
 				// just invert the colors
 				//scol = 1 - col;
-				col.r = 0.96;
+				col.r = 0.96; // make the world nice a pink like real life
 				
 				return col;
 			}

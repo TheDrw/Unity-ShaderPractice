@@ -14,6 +14,7 @@
 		_ColorMask ("Color Mask", Float) = 15
 
 		_NoiseTex("Noise texture", 2D) = "white"{}
+		_TextHeight("Text Height", Float) = 20
 
 		[Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
 	}
@@ -75,10 +76,61 @@
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 			
+			float _TextHeight;
 			fixed4 _Color;
 			fixed4 _TextureSampleAdd;
 			float4 _ClipRect;
 			sampler2D _NoiseTex;
+
+			// quill18's tutorial
+			float4 spookyText(appdata_t IN)
+			{
+				float magnitudeOfSpookyness = 10;
+				return float4( 
+								tex2Dlod(_NoiseTex, float4( IN.vertex.y / 10 + _Time[0] , 0 , 0 , 0 ) ).r , 
+								tex2Dlod(_NoiseTex, float4( 0 , IN.vertex.x / 10 + _Time[0] , 0 , 0 ) ).r, 
+								0,
+								0
+								) * magnitudeOfSpookyness;
+			}
+
+			float4 periodicUpDownText(appdata_t IN)
+			{
+				float time = _Time[2];
+				float magnitude = 10;
+				return float4
+				(
+					IN.vertex.x,
+					IN.vertex.y + sin(time) * magnitude,
+					0,
+					0
+				);
+			}
+
+			float4 shakeyToStopText(appdata_t IN)
+			{
+				float time = 200*_Time[3];
+				_TextHeight = _TextHeight - _Time[2]*_Time[2];
+
+				// not the best way but all right.
+				if(_TextHeight > 0.1)
+				{
+					_TextHeight = _TextHeight - _Time[2]*_Time[2];
+				}
+				else if(_TextHeight <= 0.1)
+				{
+					_TextHeight = 0.1;
+				}
+					
+				
+				return float4
+				(
+					IN.vertex.x,
+					IN.vertex.y + (time % _TextHeight),
+					0,
+					0
+				);
+			}
 
 			v2f vert(appdata_t IN)
 			{
@@ -87,14 +139,9 @@
 				UNITY_SETUP_INSTANCE_ID(IN);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
 
-				float4 offset = float4( 
-								tex2Dlod(_NoiseTex, float4( IN.vertex.y / 10 + _Time[0] , 0 , 0 , 0 ) ).r , 
-								tex2Dlod(_NoiseTex, float4( 0 , IN.vertex.x / 10 + _Time[0] , 0 , 0 ) ).r, 
-								0,
-								0
-								);
 
-				OUT.worldPosition = IN.vertex + offset * 5;
+				OUT.worldPosition = shakeyToStopText(IN);
+				//OUT.worldPosition = IN.vertex;
 				OUT.vertex = UnityObjectToClipPos(OUT.worldPosition);
 
 				OUT.texcoord = IN.texcoord;

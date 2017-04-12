@@ -1,4 +1,6 @@
-﻿Shader "Custom/KatUnite"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/KatUnite"
 {
 	// variables
 	Properties
@@ -54,7 +56,7 @@
 				//IN.vertex.z += IN.normal.z * _ExtrudeAmt * cos(_Time[2]) * 2; 
 				IN.vertex.z += IN.normal.z * _ExtrudeAmt * sin(_Time[2]);
 
-				OUT.position = mul(UNITY_MATRIX_MVP, IN.vertex);
+				OUT.position = UnityObjectToClipPos(IN.vertex);
 				OUT.uv = IN.uv;
 
 				return OUT;

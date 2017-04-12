@@ -1,4 +1,6 @@
-﻿Shader "Custom/PostEffectShader"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/PostEffectShader"
 {
 	Properties
 	{
@@ -32,7 +34,7 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv;
 				return o;
 			}
@@ -114,9 +116,11 @@
 								cos(i.vertex.x/distortionOfTheObjectsAmt + _Time[3])/propagationAmt 
 						     );
 			}
+			
 
 			fixed4 frag (v2f i) : SV_Target
 			{
+				//float2 invertScreen = 1 - i.uv;
 
 				fixed4 col = tex2D( _MainTex, i.uv );
 				
